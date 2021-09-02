@@ -22,12 +22,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        val tmp1 = MyConfig.IS_FIRST.real.get(this, false)
-        Log.e(Companion.TAG, "onCreate: $tmp1")
-        MyConfig.IS_FIRST.real.set(this, false)
-        val tmp2 = MyConfig.IS_FIRST.real.get(this, false)
-        Log.e(Companion.TAG, "onCreate: $tmp2")
+        val tmp1 = MyConfig.IS_FIRST.get(this)
+        Log.i(Companion.TAG, "onCreate: $tmp1")
+        MyConfig.IS_FIRST.set(this, false)
+        val tmp2 = MyConfig.IS_FIRST.get(this)
+        Log.i(Companion.TAG, "onCreate: $tmp2")
 
+        Log.i(Companion.TAG, "onCreate: ${MyConfig.LUNCH_TIMES.getInt(this)}")
+        Log.i(Companion.TAG, "onCreate: ${MyConfig.IS_FIRST.getBoolean(this)}")
+        Log.i(Companion.TAG, "onCreate: ${MyConfig.NAME.getString(this)}")
+        Log.i(Companion.TAG, "onCreate: ${MyConfig.TMP_HASH.getHashSet(this)}")
     }
 
     companion object {

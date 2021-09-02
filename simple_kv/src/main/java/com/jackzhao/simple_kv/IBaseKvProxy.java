@@ -1,10 +1,12 @@
 package com.jackzhao.simple_kv;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashSet;
 
 public class IBaseKvProxy implements InvocationHandler {
     private IBaseKv realObject;
@@ -21,7 +23,7 @@ public class IBaseKvProxy implements InvocationHandler {
 
 
         if ("reset".equals(method.getName())) {
-            Object defaultValue = getDefaultValue("defaultValue");
+            Object defaultValue = getDefaultValue();
             ReflectionUtils.setField(realObject.getClass(),
                     "key",
                     realObject,
@@ -31,9 +33,40 @@ public class IBaseKvProxy implements InvocationHandler {
 
         if ("get".equals(method.getName())) {
             String key = getName();
-            Object defaultValue = getDefaultValue("defaultValue");
+            Object defaultValue = getDefaultValue();
             return spUtils.getParam((Context) args[0], key, defaultValue);
         }
+
+        if ("getBoolean".equals(method.getName())) {
+            String key = getName();
+            Object defaultValue = getDefaultValue();
+            return (Boolean) spUtils.getParam((Context) args[0], key, defaultValue);
+        }
+
+        if ("getInt".equals(method.getName())) {
+            String key = getName();
+            Object defaultValue = getDefaultValue();
+            return (int) spUtils.getParam((Context) args[0], key, defaultValue);
+        }
+
+        if ("getLong".equals(method.getName())) {
+            String key = getName();
+            Object defaultValue = getDefaultValue();
+            return (long) spUtils.getParam((Context) args[0], key, defaultValue);
+        }
+
+        if ("getString".equals(method.getName())) {
+            String key = getName();
+            Object defaultValue = getDefaultValue();
+            return (String) spUtils.getParam((Context) args[0], key, defaultValue);
+        }
+
+        if ("getHashSet".equals(method.getName())) {
+            String key = getName();
+            Object defaultValue = getDefaultValue();
+            return (HashSet) spUtils.getParam((Context) args[0], key, defaultValue);
+        }
+
 
         if ("set".equals(method.getName())) {
             String key = getName();
@@ -43,7 +76,7 @@ public class IBaseKvProxy implements InvocationHandler {
 
         if ("increase".equals(method.getName())) {
             String key = getName();
-            Object defaultValue = getDefaultValue("defaultValue");
+            Object defaultValue = getDefaultValue();
             int value = (int) spUtils.getParam((Context) args[0], key, defaultValue);
             value += 1;
             spUtils.setParam((Context) args[0], key, value);
@@ -58,9 +91,9 @@ public class IBaseKvProxy implements InvocationHandler {
         return (String) ReflectionUtils.invoke(realObject.getClass(), "name", realObject);
     }
 
-    private Object getDefaultValue(String defaultValue) {
+    private Object getDefaultValue() {
         return ReflectionUtils.getField(realObject.getClass(),
-                defaultValue,
+                "defaultValue",
                 realObject);
     }
 
