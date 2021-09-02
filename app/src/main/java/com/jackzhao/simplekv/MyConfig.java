@@ -8,7 +8,9 @@ public enum MyConfig implements IBaseKv {
     IS_FIRST(true),
     LUNCH_TIMES(0),
     NAME("no name"),
-    TMP_HASH(new HashSet<String>());
+    TMP_HASH(new HashSet<String>()),
+    ;
+
     Object defaultValue;
 
     MyConfig(Object defaultValue) {
