@@ -80,7 +80,7 @@ public class ReflectionUtils {
 
     public static Object invoke(Class clazz, String methodName, Object instance) {
         try {
-            Method method = clazz.getDeclaredMethod(methodName);
+            Method method = clazz.getMethod(methodName);
             method.setAccessible(true);
             return method.invoke(instance);
         } catch (Exception e) {
@@ -101,7 +101,7 @@ public class ReflectionUtils {
 
     public static Object invoke(Class clazz, String methodName, Object instance, Object[] parameters, Class[] parameterTypes) {
         try {
-            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
+            Method method = clazz.getMethod(methodName, parameterTypes);
             method.setAccessible(true);
             return method.invoke(instance, parameters);
         } catch (Exception e) {
@@ -113,7 +113,7 @@ public class ReflectionUtils {
     public static Object invoke(String className, String methodName, Object instance, Object[] parameters, Class[] parameterTypes) {
         try {
             Class clazz = Class.forName(className);
-            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
+            Method method = clazz.getMethod(methodName, parameterTypes);
             method.setAccessible(true);
             return method.invoke(instance, parameters);
         } catch (Exception e) {
