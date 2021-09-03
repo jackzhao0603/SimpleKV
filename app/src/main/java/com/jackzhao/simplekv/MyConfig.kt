@@ -1,21 +1,14 @@
-package com.jackzhao.simplekv;
+package com.jackzhao.simplekv
 
-import com.jackzhao.simple_kv.IBaseKv;
+import com.jackzhao.simple_kv.IBaseKv
+import java.util.HashSet
 
-import java.util.HashSet;
-
-public enum MyConfig implements IBaseKv {
+enum class MyConfig(
+    var defaultValue: Any
+) : IBaseKv {
     IS_FIRST(true),
     LUNCH_TIMES(0),
     NAME("no name"),
-    TMP_HASH(new HashSet<String>()),
+    TMP_HASH(HashSet<String>()),
     ;
-
-    // if need default value
-    Object defaultValue;
-
-    MyConfig(Object defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
 }

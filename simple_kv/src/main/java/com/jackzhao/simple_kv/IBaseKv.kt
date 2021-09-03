@@ -1,54 +1,55 @@
-package com.jackzhao.simple_kv;
+package com.jackzhao.simple_kv
 
-import android.content.Context;
+import android.content.Context
 
-public interface IBaseKv {
-    static final String TAG = "IBaseKv";
+interface IBaseKv {
+    val fileName: String
+        get() = this.javaClass.simpleName
 
-    default String getFileName() {
-        return this.getClass().getSimpleName();
+    operator fun get(context: Context?): Any? {
+        return proxy[context]
     }
 
-    default Object get(Context context) {
-        return getProxy().get(context);
+    fun getBoolean(context: Context?): Any? {
+        return proxy.getBoolean(context)
     }
 
-    default Object getBoolean(Context context) {
-        return getProxy().getBoolean(context);
+    fun getInt(context: Context?): Any? {
+        return proxy.getInt(context)
     }
 
-    default Object getInt(Context context) {
-        return getProxy().getInt(context);
+    fun getLong(context: Context?): Any? {
+        return proxy.getLong(context)
     }
 
-    default Object getLong(Context context) {
-        return getProxy().getLong(context);
+    fun getString(context: Context?): Any? {
+        return proxy.getString(context)
     }
 
-    default Object getString(Context context) {
-        return getProxy().getString(context);
+    fun getHashSet(context: Context?): Any? {
+        return proxy.getHashSet(context)
     }
 
-    default Object getHashSet(Context context) {
-        return getProxy().getHashSet(context);
+    operator fun set(context: Context?, v: Any?) {
+        proxy[context] = v
     }
 
-    default void set(Context context, Object v) {
-        getProxy().set(context, v);
+    fun increase(context: Context?): Int {
+        return proxy.increase(context)
     }
 
-    default int increase(Context context) {
-        return getProxy().increase(context);
+    fun reset(context: Context?) {
+        proxy.reset(context)
     }
 
-    default void reset(Context context) {
-        getProxy().reset(context);
-    }
+    val proxy: IBaseKv
+        get() {
+            val proxy = IBaseKvProxy()
+            proxy.newProxyInstance(this)
+            return proxy.proxyInstance as IBaseKv
+        }
 
-    default IBaseKv getProxy() {
-        IBaseKvProxy proxy = new IBaseKvProxy();
-        proxy.newProxyInstance(this);
-        return (IBaseKv) proxy.getProxyInstance();
+    companion object {
+        const val TAG = "IBaseKv"
     }
 }
-

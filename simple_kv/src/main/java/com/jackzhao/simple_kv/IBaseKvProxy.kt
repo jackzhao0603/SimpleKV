@@ -1,114 +1,108 @@
-package com.jackzhao.simple_kv;
+package com.jackzhao.simple_kv
 
-import android.content.Context;
-import android.util.Log;
+import android.content.Context
+import com.jackzhao.simple_kv.ReflectionUtils.getField
+import com.jackzhao.simple_kv.ReflectionUtils.invoke
+import com.jackzhao.simple_kv.ReflectionUtils.setField
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
+import java.util.*
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.HashSet;
+class IBaseKvProxy : InvocationHandler {
+    private lateinit var realObject: IBaseKv
+    var spUtils: SpUtils? = null
 
-public class IBaseKvProxy implements InvocationHandler {
-    private IBaseKv realObject;
-    SpUtils spUtils = null;
-
-    @Override
-    public Object invoke(Object o, Method method, Object[] args) throws Throwable {
+    @Throws(Throwable::class)
+    override fun invoke(o: Any, method: Method, args: Array<Any>): Any? {
         if (spUtils == null) {
-            spUtils = new SpUtils(realObject.getFileName());
+            spUtils = SpUtils(realObject.fileName)
         }
-        if ("getReal".equals(method.getName())) {
-            return method.invoke(realObject, args);
+        if ("getReal" == method.name) {
+            return method.invoke(realObject, *args)
         }
-
-
-        if ("reset".equals(method.getName())) {
-            Object defaultValue = getDefaultValue();
-            ReflectionUtils.setField(realObject.getClass(),
-                    "key",
-                    realObject,
-                    defaultValue);
-            return null;
+        if ("reset" == method.name) {
+            val defaultValue = defaultValue
+            setField(
+                realObject.javaClass,
+                "key",
+                realObject,
+                defaultValue
+            )
+            return null
         }
-
-        if ("get".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("get" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!)
         }
-
-        if ("getBoolean".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return (Boolean) spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("getBoolean" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as Boolean
         }
-
-        if ("getInt".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return (int) spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("getInt" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as Int
         }
-
-        if ("getLong".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return (long) spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("getLong" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as Long
         }
-
-        if ("getString".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return (String) spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("getString" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as String
         }
-
-        if ("getHashSet".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            return (HashSet) spUtils.getParam((Context) args[0], key, defaultValue);
+        if ("getHashSet" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            return spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as HashSet<*>
         }
-
-
-        if ("set".equals(method.getName())) {
-            String key = getName();
-            spUtils.setParam((Context) args[0], key, args[1]);
-            return null;
+        if ("set" == method.name) {
+            val key = name
+            spUtils!!.setParam((args[0] as Context), key!!, args[1])
+            return null
         }
-
-        if ("increase".equals(method.getName())) {
-            String key = getName();
-            Object defaultValue = getDefaultValue();
-            int value = (int) spUtils.getParam((Context) args[0], key, defaultValue);
-            value += 1;
-            spUtils.setParam((Context) args[0], key, value);
-            return value;
+        if ("increase" == method.name) {
+            val key = name
+            val defaultValue = defaultValue
+            var value = spUtils!!.getParam((args[0] as Context), key!!, defaultValue!!) as Int
+            value += 1
+            spUtils!!.setParam((args[0] as Context), key, value)
+            return value
         }
-
-
-        return null;
+        return null
     }
 
-    private String getName() {
-        return (String) ReflectionUtils.invoke(realObject.getClass(), "name", realObject);
-    }
-
-    private Object getDefaultValue() {
-        try {
-            return ReflectionUtils.getField(realObject.getClass(),
+    private val name: String?
+        private get() = invoke(realObject.javaClass, "name", realObject) as String?
+    private val defaultValue: Any?
+        private get() {
+            try {
+                return getField(
+                    realObject.javaClass,
                     "defaultValue",
-                    realObject);
-        } catch (Exception e) {
+                    realObject
+                )
+            } catch (e: Exception) {
+            }
+            return null
         }
-        return null;
+
+    fun newProxyInstance(realObject: IBaseKv): Any {
+        this.realObject = realObject
+        return Proxy.newProxyInstance(
+            realObject.javaClass.classLoader,
+            realObject.javaClass.interfaces, this
+        )
     }
 
-    public Object newProxyInstance(IBaseKv realObject) {
-        this.realObject = realObject;
-        return Proxy.newProxyInstance(realObject.getClass().getClassLoader(),
-                realObject.getClass().getInterfaces(), this);
-    }
-
-    public Object getProxyInstance() {
-        return Proxy.newProxyInstance(realObject.getClass().getClassLoader(),
-                realObject.getClass().getInterfaces(), this);
-    }
+    val proxyInstance: Any
+        get() = Proxy.newProxyInstance(
+            realObject.javaClass.classLoader,
+            realObject.javaClass.interfaces, this
+        )
 }

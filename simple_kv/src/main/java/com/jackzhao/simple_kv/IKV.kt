@@ -1,18 +1,11 @@
-package com.jackzhao.simple_kv;
+package com.jackzhao.simple_kv
 
-import android.content.Context;
+import android.content.Context
 
-import java.util.Set;
-
-public interface IKV {
-
-    void setParam(Context context, String key, Object object);
-
-    public Object getParam(Context context, String key, Object defaultObject);
-
-    void clearAll(Context context);
-
-    void clear(Context context, String key);
-
-    Set<String> getAllKeys(Context context);
+interface IKV {
+    fun setParam(context: Context, key: String, value: Any)
+    fun getParam(context: Context, key: String, defaultObject: Any?): Any?
+    fun clearAll(context: Context)
+    fun clear(context: Context, key: String)
+    fun getAllKeys(context: Context): Set<String>
 }

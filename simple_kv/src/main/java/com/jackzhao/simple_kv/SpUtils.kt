@@ -1,85 +1,83 @@
-package com.jackzhao.simple_kv;
+package com.jackzhao.simple_kv
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
 
-import java.util.Set;
+class SpUtils(mFileName: String) : IKV {
+    private var mFileName = "SpDefault"
 
-public class SpUtils implements IKV {
-    private String mFileName = "SpDefault";
 
-    public SpUtils(String mFileName) {
-        this.mFileName = mFileName;
-    }
-
-    @Override
-    public void setParam(Context context, String key, Object object) {
-
-        String type = object.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(mFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-
-        if ("String".equals(type)) {
-            editor.putString(key, (String) object);
-        } else if ("Integer".equals(type)) {
-            editor.putInt(key, (Integer) object);
-        } else if ("Boolean".equals(type)) {
-            editor.putBoolean(key, (Boolean) object);
-        } else if ("Float".equals(type)) {
-            editor.putFloat(key, (Float) object);
-        } else if ("Long".equals(type)) {
-            editor.putLong(key, (Long) object);
-        } else if ("HashSet".equals(type)) {
-            editor.putStringSet(key, (Set<String>) object);
+    override fun setParam(context: Context, key: String, value: Any) {
+        val type = value.javaClass.simpleName
+        val sp = context.getSharedPreferences(mFileName, Context.MODE_PRIVATE)
+        val editor = sp.edit()
+        if ("String" == type) {
+            editor.putString(key, value as String)
+        } else if ("Integer" == type) {
+            editor.putInt(key, (value as Int))
+        } else if ("Boolean" == type) {
+            editor.putBoolean(key, (value as Boolean))
+        } else if ("Float" == type) {
+            editor.putFloat(key, (value as Float))
+        } else if ("Long" == type) {
+            editor.putLong(key, (value as Long))
+        } else if ("HashSet" == type) {
+            editor.putStringSet(key, value as Set<String?>)
         }
-
-        editor.commit();
+        editor.commit()
     }
 
-    @Override
-    public Object getParam(Context context, String key, Object defaultObject) {
-        String type = defaultObject.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS);
-
-        if ("String".equals(type)) {
-            return sp.getString(key, (String) defaultObject);
-        } else if ("Integer".equals(type)) {
-            return sp.getInt(key, (Integer) defaultObject);
-        } else if ("Boolean".equals(type)) {
-            return sp.getBoolean(key, (Boolean) defaultObject);
-        } else if ("Float".equals(type)) {
-            return sp.getFloat(key, (Float) defaultObject);
-        } else if ("Long".equals(type)) {
-            return sp.getLong(key, (Long) defaultObject);
-        } else if ("HashSet".equals(type)) {
-            return sp.getStringSet(key, (Set<String>) defaultObject);
+    override fun getParam(context: Context, key: String, defaultObject: Any?): Any? {
+        val type = defaultObject?.javaClass?.simpleName ?: null
+        val sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
+        when (type) {
+            "String" -> {
+                return sp.getString(key, defaultObject as String)!!
+            }
+            "Integer" -> {
+                return sp.getInt(key, (defaultObject as Int))
+            }
+            "Boolean" -> {
+                return sp.getBoolean(key, (defaultObject as Boolean))
+            }
+            "Float" -> {
+                return sp.getFloat(key, (defaultObject as Float))
+            }
+            "Long" -> {
+                return sp.getLong(key, (defaultObject as Long))
+            }
+            "HashSet" -> {
+                return sp.getStringSet(key, defaultObject as Set<String?>)!!
+            }
+            else -> return sp.all[key]
         }
-
-        return defaultObject;
     }
 
 
-    @Override
-    public void clearAll(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(mFileName,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.clear().commit();
+    override fun clearAll(context: Context) {
+        val sp = context.getSharedPreferences(
+            mFileName,
+            Context.MODE_PRIVATE
+        )
+        val editor = sp.edit()
+        editor.clear().commit()
     }
 
-    @Override
-    public void clear(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(mFileName,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(key);
-        editor.commit();
+    override fun clear(context: Context, key: String) {
+        val sp = context.getSharedPreferences(
+            mFileName,
+            Context.MODE_PRIVATE
+        )
+        val editor = sp.edit()
+        editor.remove(key)
+        editor.commit()
     }
 
-    @Override
-    public Set<String> getAllKeys(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS);
-        return sp.getAll().keySet();
+    override fun getAllKeys(context: Context): Set<String> {
+        val sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
+        return sp.all.keys
     }
 
+    init {
+        this.mFileName = mFileName
+    }
 }
