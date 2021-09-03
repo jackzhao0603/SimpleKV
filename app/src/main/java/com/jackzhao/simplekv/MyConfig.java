@@ -11,6 +11,7 @@ public enum MyConfig implements IBaseKv {
     TMP_HASH(new HashSet<String>()),
     ;
 
+    // if need default value
     Object defaultValue;
 
     MyConfig(Object defaultValue) {

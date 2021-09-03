@@ -92,9 +92,13 @@ public class IBaseKvProxy implements InvocationHandler {
     }
 
     private Object getDefaultValue() {
-        return ReflectionUtils.getField(realObject.getClass(),
-                "defaultValue",
-                realObject);
+        try {
+            return ReflectionUtils.getField(realObject.getClass(),
+                    "defaultValue",
+                    realObject);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public Object newProxyInstance(IBaseKv realObject) {
