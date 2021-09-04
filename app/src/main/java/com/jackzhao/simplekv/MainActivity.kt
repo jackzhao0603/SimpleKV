@@ -9,11 +9,14 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.jackzhao.simple_kv.SimpleKvMgr
+import com.jackzhao.simple_kv.StorageType
 import com.jackzhao.simplekv.ui.theme.SimpleKVTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SimpleKvMgr.init(StorageType.MMKV)
         setContent {
             SimpleKVTheme {
                 // A surface container using the 'background' color from the theme

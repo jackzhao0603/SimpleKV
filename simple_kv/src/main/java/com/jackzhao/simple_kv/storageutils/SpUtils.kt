@@ -1,8 +1,9 @@
-package com.jackzhao.simple_kv
+package com.jackzhao.simple_kv.storageutils
 
 import android.content.Context
+import com.jackzhao.simple_kv.IKV
 
-class SpUtils(mFileName: String) : IKV {
+class SpUtils(fileName: String) : IKV {
     private var mFileName = "SpDefault"
 
 
@@ -10,18 +11,25 @@ class SpUtils(mFileName: String) : IKV {
         val type = value.javaClass.simpleName
         val sp = context.getSharedPreferences(mFileName, Context.MODE_PRIVATE)
         val editor = sp.edit()
-        if ("String" == type) {
-            editor.putString(key, value as String)
-        } else if ("Integer" == type) {
-            editor.putInt(key, (value as Int))
-        } else if ("Boolean" == type) {
-            editor.putBoolean(key, (value as Boolean))
-        } else if ("Float" == type) {
-            editor.putFloat(key, (value as Float))
-        } else if ("Long" == type) {
-            editor.putLong(key, (value as Long))
-        } else if ("HashSet" == type) {
-            editor.putStringSet(key, value as Set<String?>)
+        when (type) {
+            "String" -> {
+                editor.putString(key, value as String)
+            }
+            "Integer" -> {
+                editor.putInt(key, (value as Int))
+            }
+            "Boolean" -> {
+                editor.putBoolean(key, (value as Boolean))
+            }
+            "Float" -> {
+                editor.putFloat(key, (value as Float))
+            }
+            "Long" -> {
+                editor.putLong(key, (value as Long))
+            }
+            "HashSet" -> {
+                editor.putStringSet(key, value as Set<String?>)
+            }
         }
         editor.commit()
     }
@@ -78,6 +86,6 @@ class SpUtils(mFileName: String) : IKV {
     }
 
     init {
-        this.mFileName = mFileName
+        this.mFileName = fileName
     }
 }
