@@ -39,7 +39,12 @@
        }
     }
     ```
-4 Use it
+4 Select mmkv to replace SP(options)
+   ```kotlin
+       SimpleKvMgr.init(StorageType.MMKV)
+   ```
+
+5 Use it
    ```kotlin
         val tmp1 = MyConfig.IS_FIRST.get(this)
         Log.i(Companion.TAG, "onCreate: $tmp1")
