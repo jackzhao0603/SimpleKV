@@ -20,23 +20,16 @@
 2. Add the dependency
     ```gradle
      dependencies {
-	     implementation 'com.github.jackzhao0603:SimpleKV:0.1.1'
+	     implementation 'com.github.jackzhao0603:SimpleKV:0.1.4'
 	 }
     ```
 3. Create KV class
-    ```java
-    public enum MyConfig implements IBaseKv {
+    ```kotlin
+    enum class MyConfig(var defaultValue: Any) : IBaseKv {
        IS_FIRST(true),
-       LUNCH_TIMES(0),
-       NAME("no name"),
-       TMP_HASH(new HashSet<String>()),
-       ;
-   
-       Object defaultValue;
-   
-       MyConfig(Object defaultValue) {
-           this.defaultValue = defaultValue;
-       }
+       LUNCH_TIMES(0), 
+       NAME("no name"), 
+       TMP_HASH(HashSet<String>());
     }
     ```
 4 Select mmkv to replace SP(options)
