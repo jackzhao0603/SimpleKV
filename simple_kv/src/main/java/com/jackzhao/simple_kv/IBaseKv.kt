@@ -6,39 +6,39 @@ interface IBaseKv {
     val fileName: String
         get() = this.javaClass.simpleName
 
-    operator fun get(context: Context?): Any? {
+    operator fun get(context: Context): Any? {
         return proxy[context]
     }
 
-    fun getBoolean(context: Context?): Boolean? {
+    fun getBoolean(context: Context): Boolean {
         return proxy.getBoolean(context)
     }
 
-    fun getInt(context: Context?): Int? {
+    fun getInt(context: Context): Int {
         return proxy.getInt(context)
     }
 
-    fun getLong(context: Context?): Long? {
+    fun getLong(context: Context): Long {
         return proxy.getLong(context)
     }
 
-    fun getString(context: Context?): String? {
+    fun getString(context: Context): String {
         return proxy.getString(context)
     }
 
-    fun getHashSet(context: Context?): HashSet<Any?>? {
+    fun getHashSet(context: Context): HashSet<Any?> {
         return proxy.getHashSet(context)
     }
 
-    operator fun set(context: Context?, v: Any?) {
+    operator fun set(context: Context, v: Any?) {
         proxy[context] = v
     }
 
-    fun increase(context: Context?): Int {
+    fun increase(context: Context): Int {
         return proxy.increase(context)
     }
 
-    fun reset(context: Context?) {
+    fun reset(context: Context) {
         proxy.reset(context)
     }
 
@@ -48,8 +48,4 @@ interface IBaseKv {
             proxy.newProxyInstance(this)
             return proxy.proxyInstance as IBaseKv
         }
-
-    companion object {
-        const val TAG = "IBaseKv"
-    }
 }
