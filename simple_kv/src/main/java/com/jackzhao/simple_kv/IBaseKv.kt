@@ -10,23 +10,23 @@ interface IBaseKv {
         return proxy[context]
     }
 
-    fun getBoolean(context: Context?): Any? {
+    fun getBoolean(context: Context?): Boolean? {
         return proxy.getBoolean(context)
     }
 
-    fun getInt(context: Context?): Any? {
+    fun getInt(context: Context?): Int? {
         return proxy.getInt(context)
     }
 
-    fun getLong(context: Context?): Any? {
+    fun getLong(context: Context?): Long? {
         return proxy.getLong(context)
     }
 
-    fun getString(context: Context?): Any? {
+    fun getString(context: Context?): String? {
         return proxy.getString(context)
     }
 
-    fun getHashSet(context: Context?): Any? {
+    fun getHashSet(context: Context?): HashSet<Any?>? {
         return proxy.getHashSet(context)
     }
 
