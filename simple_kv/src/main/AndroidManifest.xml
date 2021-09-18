@@ -5,7 +5,7 @@
     <application>
         <provider
             android:name=".provider.SimpleKvProvider"
-            android:authorities="simple_kv.contextprovider"
+            android:authorities="${applicationId}.simple_kv.contextprovider"
             android:enabled="true"
             android:exported="false" />
     </application>
