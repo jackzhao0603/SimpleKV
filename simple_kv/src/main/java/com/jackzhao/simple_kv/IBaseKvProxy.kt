@@ -1,6 +1,5 @@
 package com.jackzhao.simple_kv
 
-import android.content.Context
 import com.jackzhao.simple_kv.ReflectionUtils.getField
 import com.jackzhao.simple_kv.ReflectionUtils.invoke
 import com.jackzhao.simple_kv.ReflectionUtils.setField
@@ -12,6 +11,7 @@ import java.lang.reflect.Proxy
 import java.util.*
 
 class IBaseKvProxy : InvocationHandler {
+    private val TAG = "IBaseKvProxy"
     private lateinit var mRealObject: IBaseKv
     private var mIkv: IKV? = null
 
@@ -19,16 +19,16 @@ class IBaseKvProxy : InvocationHandler {
 
 
     @Throws(Throwable::class)
-    override fun invoke(o: Any, method: Method, args: Array<Any>): Any? {
+    override fun invoke(o: Any, method: Method, args: Array<Any>?): Any? {
         if (mIkv == null) {
-            if (SimpleKvMgr.type == StorageType.MMKV) {
-                mIkv = MmkvUtils((args[0] as Context),mRealObject.fileName)
+            mIkv = if (SimpleKvMgr.type == StorageType.MMKV) {
+                MmkvUtils(mRealObject.fileName)
             } else {
-                mIkv = SpUtils(mRealObject.fileName)
+                SpUtils(mRealObject.fileName)
             }
         }
         if ("getReal" == method.name) {
-            return method.invoke(mRealObject, *args)
+            return method.invoke(mRealObject, null)
         }
         if ("reset" == method.name) {
             val defaultValue = defaultValue
@@ -43,44 +43,44 @@ class IBaseKvProxy : InvocationHandler {
         if ("get" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!)
+            return mIkv!!.getParam(key!!, defaultValue!!)
         }
         if ("getBoolean" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as Boolean
+            return mIkv!!.getParam(key!!, defaultValue!!) as Boolean
         }
         if ("getInt" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as Int
+            return mIkv!!.getParam(key!!, defaultValue!!) as Int
         }
         if ("getLong" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as Long
+            return mIkv!!.getParam(key!!, defaultValue!!) as Long
         }
         if ("getString" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as String
+            return mIkv!!.getParam(key!!, defaultValue!!) as String
         }
         if ("getHashSet" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            return mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as HashSet<*>
+            return mIkv!!.getParam(key!!, defaultValue!!) as HashSet<*>
         }
         if ("set" == method.name) {
             val key = name
-            mIkv!!.setParam((args[0] as Context), key!!, args[1])
+            args?.get(0)?.let { mIkv!!.setParam(key!!, it) }
             return null
         }
         if ("increase" == method.name) {
             val key = name
             val defaultValue = defaultValue
-            var value = mIkv!!.getParam((args[0] as Context), key!!, defaultValue!!) as Int
+            var value = mIkv!!.getParam(key!!, defaultValue!!) as Int
             value += 1
-            mIkv!!.setParam((args[0] as Context), key, value)
+            mIkv!!.setParam(key, value)
             return value
         }
         return null

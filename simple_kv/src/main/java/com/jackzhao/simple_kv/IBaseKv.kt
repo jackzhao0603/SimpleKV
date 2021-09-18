@@ -1,45 +1,43 @@
 package com.jackzhao.simple_kv
 
-import android.content.Context
-
 interface IBaseKv {
     val fileName: String
         get() = this.javaClass.simpleName
 
-    operator fun get(context: Context): Any? {
-        return proxy[context]
+    fun get(): Any? {
+        return proxy.get()
     }
 
-    fun getBoolean(context: Context): Boolean {
-        return proxy.getBoolean(context)
+    fun getBoolean(): Boolean {
+        return proxy.getBoolean()
     }
 
-    fun getInt(context: Context): Int {
-        return proxy.getInt(context)
+    fun getInt(): Int {
+        return proxy.getInt()
     }
 
-    fun getLong(context: Context): Long {
-        return proxy.getLong(context)
+    fun getLong(): Long {
+        return proxy.getLong()
     }
 
-    fun getString(context: Context): String {
-        return proxy.getString(context)
+    fun getString(): String {
+        return proxy.getString()
     }
 
-    fun getHashSet(context: Context): HashSet<Any?> {
-        return proxy.getHashSet(context)
+    fun getHashSet(): HashSet<Any?> {
+        return proxy.getHashSet()
     }
 
-    operator fun set(context: Context, v: Any?) {
-        proxy[context] = v
+    fun set(v: Any?) {
+        proxy.set(v)
     }
 
-    fun increase(context: Context): Int {
-        return proxy.increase(context)
+    fun increase(): Int {
+        return proxy.increase()
     }
 
-    fun reset(context: Context) {
-        proxy.reset(context)
+    fun reset() {
+        proxy.reset()
     }
 
     val proxy: IBaseKv

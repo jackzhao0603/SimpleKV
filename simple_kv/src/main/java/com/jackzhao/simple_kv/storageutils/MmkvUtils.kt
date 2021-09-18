@@ -1,22 +1,22 @@
 package com.jackzhao.simple_kv.storageutils
 
-import android.content.Context
 import com.jackzhao.simple_kv.IKV
+import com.jackzhao.simple_kv.provider.SimpleKvProvider
 import com.tencent.mmkv.MMKV
 
 
-class MmkvUtils(context: Context, fileName: String) : IKV {
+class MmkvUtils(fileName: String) : IKV {
     private var mFileName = "MmkvDefault"
     var mKv: MMKV
 
     init {
-        MMKV.initialize(context)
+        MMKV.initialize(SimpleKvProvider.sContext)
         this.mFileName = fileName
         mKv = MMKV.mmkvWithID(mFileName)
     }
 
 
-    override fun setParam(context: Context, key: String, value: Any) {
+    override fun setParam(key: String, value: Any) {
         val type = value.javaClass.simpleName
         when (type) {
             "String" -> {
@@ -41,7 +41,7 @@ class MmkvUtils(context: Context, fileName: String) : IKV {
         mKv.sync()
     }
 
-    override fun getParam(context: Context, key: String, defaultObject: Any?): Any? {
+    override fun getParam(key: String, defaultObject: Any?): Any? {
         when (defaultObject?.javaClass?.simpleName ?: null) {
             "String" -> {
                 return mKv.getString(key, defaultObject as String)
@@ -65,15 +65,15 @@ class MmkvUtils(context: Context, fileName: String) : IKV {
         }
     }
 
-    override fun clearAll(context: Context) {
+    override fun clearAll() {
         mKv.clearAll()
     }
 
-    override fun clear(context: Context, key: String) {
+    override fun clear(key: String) {
         mKv.remove(key)
     }
 
-    override fun getAllKeys(context: Context): Set<String> {
+    override fun getAllKeys(): Set<String> {
         return mKv.allKeys().toSet()
     }
 }

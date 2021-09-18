@@ -2,14 +2,16 @@ package com.jackzhao.simple_kv.storageutils
 
 import android.content.Context
 import com.jackzhao.simple_kv.IKV
+import com.jackzhao.simple_kv.provider.SimpleKvProvider
 
 class SpUtils(fileName: String) : IKV {
     private var mFileName = "SpDefault"
+    val mContext = SimpleKvProvider.sContext!!
 
 
-    override fun setParam(context: Context, key: String, value: Any) {
+    override fun setParam(key: String, value: Any) {
         val type = value.javaClass.simpleName
-        val sp = context.getSharedPreferences(mFileName, Context.MODE_PRIVATE)
+        val sp = mContext.getSharedPreferences(mFileName, Context.MODE_PRIVATE)
         val editor = sp.edit()
         when (type) {
             "String" -> {
@@ -34,9 +36,9 @@ class SpUtils(fileName: String) : IKV {
         editor.commit()
     }
 
-    override fun getParam(context: Context, key: String, defaultObject: Any?): Any? {
+    override fun getParam(key: String, defaultObject: Any?): Any? {
         val type = defaultObject?.javaClass?.simpleName ?: null
-        val sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
+        val sp = mContext.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
         when (type) {
             "String" -> {
                 return sp.getString(key, defaultObject as String)!!
@@ -61,8 +63,8 @@ class SpUtils(fileName: String) : IKV {
     }
 
 
-    override fun clearAll(context: Context) {
-        val sp = context.getSharedPreferences(
+    override fun clearAll() {
+        val sp = mContext.getSharedPreferences(
             mFileName,
             Context.MODE_PRIVATE
         )
@@ -70,8 +72,8 @@ class SpUtils(fileName: String) : IKV {
         editor.clear().commit()
     }
 
-    override fun clear(context: Context, key: String) {
-        val sp = context.getSharedPreferences(
+    override fun clear(key: String) {
+        val sp = mContext.getSharedPreferences(
             mFileName,
             Context.MODE_PRIVATE
         )
@@ -80,8 +82,8 @@ class SpUtils(fileName: String) : IKV {
         editor.commit()
     }
 
-    override fun getAllKeys(context: Context): Set<String> {
-        val sp = context.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
+    override fun getAllKeys(): Set<String> {
+        val sp = mContext.getSharedPreferences(mFileName, Context.MODE_MULTI_PROCESS)
         return sp.all.keys
     }
 
