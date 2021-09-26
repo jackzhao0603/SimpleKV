@@ -20,7 +20,7 @@
 2. Add the dependency
     ```gradle
      dependencies {
-	     implementation 'com.github.jackzhao0603:SimpleKV:0.1.7'
+	     implementation 'com.github.jackzhao0603:SimpleKV:0.1.8'
 	 }
     ```
 3. Create KV class
