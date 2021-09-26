@@ -16,7 +16,7 @@ import com.jackzhao.simplekv.ui.theme.SimpleKVTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SimpleKvMgr.init(StorageType.MMKV)
+        SimpleKvMgr.init(this, StorageType.MMKV)
         setContent {
             SimpleKVTheme {
                 // A surface container using the 'background' color from the theme

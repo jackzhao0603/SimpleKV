@@ -2,11 +2,11 @@ package com.jackzhao.simple_kv.storageutils
 
 import android.content.Context
 import com.jackzhao.simple_kv.IKV
-import com.jackzhao.simple_kv.provider.SimpleKvProvider
+import com.jackzhao.simple_kv.SimpleKvMgr
 
 class SpUtils(fileName: String) : IKV {
     private var mFileName = "SpDefault"
-    val mContext = SimpleKvProvider.sContext!!
+    private val mContext = SimpleKvMgr.context!!
 
 
     override fun setParam(key: String, value: Any) {

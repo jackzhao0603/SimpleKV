@@ -1,7 +1,7 @@
 package com.jackzhao.simple_kv.storageutils
 
 import com.jackzhao.simple_kv.IKV
-import com.jackzhao.simple_kv.provider.SimpleKvProvider
+import com.jackzhao.simple_kv.SimpleKvMgr
 import com.tencent.mmkv.MMKV
 
 
@@ -10,7 +10,7 @@ class MmkvUtils(fileName: String) : IKV {
     var mKv: MMKV
 
     init {
-        MMKV.initialize(SimpleKvProvider.sContext)
+        MMKV.initialize(SimpleKvMgr.context!!)
         this.mFileName = fileName
         mKv = MMKV.mmkvWithID(mFileName)
     }
