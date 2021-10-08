@@ -7,11 +7,11 @@ object SimpleKvMgr {
     var context: Context? = null
 
     @Synchronized
-    fun init(context: Context, type: StorageType = StorageType.MMKV) {
+    fun init(_context: Context, type: StorageType = StorageType.MMKV) {
         if (context != null) {
             return
         }
         this.type = type
-        this.context = context
+        this.context = _context
     }
 }
