@@ -12,7 +12,7 @@ class MmkvUtils(fileName: String) : IKV {
     init {
         MMKV.initialize(SimpleKvMgr.context!!)
         this.mFileName = fileName
-        mKv = MMKV.mmkvWithID(mFileName)
+        mKv = MMKV.mmkvWithID(mFileName, MMKV.MULTI_PROCESS_MODE)
     }
 
 
