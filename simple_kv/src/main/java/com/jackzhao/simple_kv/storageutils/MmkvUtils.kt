@@ -3,6 +3,7 @@ package com.jackzhao.simple_kv.storageutils
 import com.jackzhao.simple_kv.IKV
 import com.jackzhao.simple_kv.SimpleKvMgr
 import com.tencent.mmkv.MMKV
+import com.tencent.mmkv.MMKVLogLevel
 
 
 class MmkvUtils(fileName: String) : IKV {
@@ -10,7 +11,7 @@ class MmkvUtils(fileName: String) : IKV {
     var mKv: MMKV
 
     init {
-        MMKV.initialize(SimpleKvMgr.context!!)
+        MMKV.initialize(SimpleKvMgr.context!!, MMKVLogLevel.LevelWarning)
         this.mFileName = fileName
         mKv = MMKV.mmkvWithID(mFileName, MMKV.MULTI_PROCESS_MODE)
     }
